@@ -14,6 +14,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 import static me.neovai.EmoteMotionClient.LAYER_ID;
 
 import static me.neovai.emotes.Emotes.*;

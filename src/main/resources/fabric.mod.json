@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "emotemotion",
+	"version": "${version}",
+	"name": "EmoteMotion",
+	"description": "Player movement animations via EmoteCraft, visible to players on EmoteCraft-enabled servers",
+	"authors": [
+		"NeoVai"
+	],
+	"contact": {
+		"sources": "https://github.com/neo-vai/EmoteMotion?"
+	},
+	"license": "GPL-3.0",
+	"icon": "assets/emotemotion/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"me.neovai.EmoteMotion"
+		],
+		"client": [
+			"me.neovai.EmoteMotionClient"
+		]
+	},
+	"mixins": [
+		"emotemotion.mixins.json",
+		{
+			"config": "emotemotion.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.17.3",
+		"minecraft": "~1.21.10",
+		"java": ">=21",
+		"fabric-api": "*",
+        "player_animation_library": "*"
+    },
+	"suggests": {
+		"another-mod": "*"
+	}
+}

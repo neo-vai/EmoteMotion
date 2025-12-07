@@ -4,6 +4,7 @@ package me.neovai;
 import com.zigythebird.playeranim.animation.PlayerAnimationController;
 import com.zigythebird.playeranim.api.PlayerAnimationFactory;
 import com.zigythebird.playeranimcore.enums.PlayState;
+import me.neovai.emotes.Emotes;
 import me.neovai.player.PlayerController;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.resources.ResourceLocation;
@@ -15,6 +16,7 @@ public class EmoteMotionClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+        Emotes.init();
 
         // EmoteCraft Layer innit
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(LAYER_ID, 900,

@@ -1,4 +1,4 @@
-package me.neovai.player;
+package me.neovai.player.status;
 
 public enum PlayerMotionStatus {
     STAY(0),

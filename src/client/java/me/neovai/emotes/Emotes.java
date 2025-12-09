@@ -1,6 +1,7 @@
 package me.neovai.emotes;
 
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -15,15 +16,22 @@ public class Emotes {
     public static final List<ResourceLocation> SWORD = new ArrayList<>();
     public static int SWORD_TICKS;
 
-    public static ResourceLocation randomSword(@Nullable ResourceLocation last) {
+    public static final List<ResourceLocation> HAND = new ArrayList<>();
+    public static int HAND_TICK;
+
+    public static @Nullable ResourceLocation randomSword() {
         if (SWORD.isEmpty()) return null;
+        return random(new ArrayList<>(SWORD));
+    }
 
-        List<ResourceLocation> options = new ArrayList<>(SWORD);
+    public static @Nullable ResourceLocation randomHand() {
+        if (HAND.isEmpty()) return null;
+        return random(new ArrayList<>(HAND));
+    }
 
-        if (last != null) {
-            options.remove(last);
-        }
 
+    private static @Nullable ResourceLocation random(@NotNull List<ResourceLocation> options) {
+        if (options.isEmpty()) return null;
         int index = (int) (Math.random() * options.size());
         return options.get(index);
     }
@@ -35,7 +43,13 @@ public class Emotes {
 
         SWORD.add(ResourceLocation.parse("emotemotion:sword1"));
         SWORD.add(ResourceLocation.parse("emotemotion:sword2"));
+        SWORD.add(ResourceLocation.parse("emotemotion:sword3"));
         SWORD_TICKS = 11;
+
+        HAND.add(ResourceLocation.parse("emotemotion:hand1"));
+        HAND.add(ResourceLocation.parse("emotemotion:hand2"));
+        HAND.add(ResourceLocation.parse("emotemotion:hand3"));
+        HAND_TICK = 16;
     }
 
 }

@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.client.player.ClientPreAttackCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -139,16 +140,27 @@ public class PlayerController {
 
     private void onStartAttacking(Player player, PlayerAnimationController controller) {
         if (isSword(player.getMainHandItem())) {
-            ATTACK_TIMER = SWORD_TICKS;
-            controller.triggerAnimation(randomSword(null));
+            ResourceLocation sword = randomSword();
+            if (sword != null) {
+                ATTACK_TIMER = SWORD_TICKS;
+                controller.triggerAnimation(sword);
+                return;
+            }
+        }
+        ResourceLocation hand = randomHand();
+        if (hand != null) {
+            ATTACK_TIMER = HAND_TICK;
+            controller.triggerAnimation(randomHand());
         }
     }
 
     private void onStartStay(Player player, PlayerAnimationController controller) {}
 
     private boolean isSword(ItemStack stack) {
-        return true;
+        return stack.is(ItemTags.SWORDS);
     }
+
+
 
     // STOP EVENTS
 

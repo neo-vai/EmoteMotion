@@ -35,8 +35,7 @@ public class Emotes {
 
         SWORD.add(ResourceLocation.parse("emotemotion:sword1"));
         SWORD.add(ResourceLocation.parse("emotemotion:sword2"));
-        SWORD.add(ResourceLocation.parse("emotemotion:sword3"));
-        SWORD_TICKS = 20;
+        SWORD_TICKS = 11;
     }
 
 }

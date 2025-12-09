@@ -22,12 +22,12 @@ public class PlayerController {
     private int ATTACK_TIMER;
 
 
-    private CurrentStatus PRESET_STAY = new CurrentStatus(PlayerMotionStatus.STAY, this::isStay, this::onStartStay, this::onStopStay);
-    private CurrentStatus PRESET_WALKING = new CurrentStatus(PlayerMotionStatus.WALKING, this::isWalking, this::onStartWalking, this::onStopWalking);
-    private CurrentStatus PRESET_SPRINTING = new CurrentStatus(PlayerMotionStatus.SPRINTING, this::isSprinting, this::onStartSprinting, this::onStopSprinting);
-    private CurrentStatus PRESET_JUMPING = new CurrentStatus(PlayerMotionStatus.JUMPING, this::isJumping, this::onStartJumping, this::onStopJumping);
-    private CurrentStatus PRESET_SHIFTING = new CurrentStatus(PlayerMotionStatus.SHIFTING, this::isShifting, this::onStartShifting, this::onStopShifting);
-    private CurrentStatus PRESET_ATTACKING = new CurrentStatus(PlayerMotionStatus.ATTACKING, this::isAttacking, this::onStartAttacking, this::onStopAttacking);
+    private final CurrentStatus PRESET_STAY = new CurrentStatus(PlayerMotionStatus.STAY, this::isStay, this::onStartStay, this::onStopStay);
+    private final CurrentStatus PRESET_WALKING = new CurrentStatus(PlayerMotionStatus.WALKING, this::isWalking, this::onStartWalking, this::onStopWalking);
+    private final CurrentStatus PRESET_SPRINTING = new CurrentStatus(PlayerMotionStatus.SPRINTING, this::isSprinting, this::onStartSprinting, this::onStopSprinting);
+    private final CurrentStatus PRESET_JUMPING = new CurrentStatus(PlayerMotionStatus.JUMPING, this::isJumping, this::onStartJumping, this::onStopJumping);
+    private final CurrentStatus PRESET_SHIFTING = new CurrentStatus(PlayerMotionStatus.SHIFTING, this::isShifting, this::onStartShifting, this::onStopShifting);
+    private final CurrentStatus PRESET_ATTACKING = new CurrentStatus(PlayerMotionStatus.ATTACKING, this::isAttacking, this::onStartAttacking, this::onStopAttacking);
 
     public PlayerController() {
         this.CURRENT = PRESET_STAY;

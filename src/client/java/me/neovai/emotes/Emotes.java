@@ -48,8 +48,7 @@ public class Emotes {
 
         HAND.add(ResourceLocation.parse("emotemotion:hand1"));
         HAND.add(ResourceLocation.parse("emotemotion:hand2"));
-        HAND.add(ResourceLocation.parse("emotemotion:hand3"));
-        HAND_TICK = 16;
+        HAND_TICK = 8;
     }
 
 }

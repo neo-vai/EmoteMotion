@@ -10,12 +10,10 @@ public enum PlayerMotionStatus {
 
     private final int priority;
 
-    // Конструктор
     PlayerMotionStatus(int priority) {
         this.priority = priority;
     }
-
-    // Геттер
+    
     public int getPriority() {
         return priority;
     }

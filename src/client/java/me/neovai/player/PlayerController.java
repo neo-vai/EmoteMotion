@@ -7,6 +7,7 @@ import me.neovai.player.status.PlayerMotionStatus;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.client.player.ClientPreAttackCallback;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Player;
@@ -176,7 +177,8 @@ public class PlayerController {
     }
 
     private void onStartAttacking(Player player, PlayerAnimationController controller) {
-        if (isSword(player.getMainHandItem())) {
+        ItemStack attackItem = player.getMainHandItem();
+        if (isSword(attackItem)) {
             ResourceLocation sword = randomSword();
             if (sword != null) {
                 ATTACK_TIMER = SWORD_TICKS;
@@ -184,6 +186,11 @@ public class PlayerController {
                 return;
             }
         }
+        
+        if (isWeapon(attackItem)) {
+            return;
+        }
+
         ResourceLocation hand = randomHand();
         if (hand != null) {
             ATTACK_TIMER = HAND_TICK;
@@ -204,6 +211,12 @@ public class PlayerController {
     private boolean isSword(ItemStack stack) {
         return stack.is(ItemTags.SWORDS);
     }
+
+    private boolean isWeapon(ItemStack stack) {
+        String name = stack.getItem().getDescriptionId().toString();
+        return name.endsWith("axe") || name.endsWith("spear") || name.endsWith("trident") || name.endsWith("sword") || name.endsWith("mace");
+    }
+
 
     // STOP EVENTS
 

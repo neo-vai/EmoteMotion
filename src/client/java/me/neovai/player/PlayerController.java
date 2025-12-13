@@ -32,6 +32,7 @@ public class PlayerController {
     private final CurrentStatus PRESET_SWIMMING = new CurrentStatus(PlayerMotionStatus.SWIMMING, this::isSwimming, this::onStartNothing, this::onStopNothing);
     private final CurrentStatus PRESET_SHIFTING = new CurrentStatus(PlayerMotionStatus.SHIFTING, this::isShifting, this::onStartNothing, this::onStopNothing);
     private final CurrentStatus PRESET_USE_ANIMATION = new CurrentStatus(PlayerMotionStatus.USE_ANIMATION, this::isUsingAnimation, this::onStartNothing, this::onStopNothing);
+    private final CurrentStatus PRESET_EATING = new CurrentStatus(PlayerMotionStatus.EATING, this::isEating, this::onStartEating, this::onStopNothing);
     private final CurrentStatus PRESET_ATTACKING = new CurrentStatus(PlayerMotionStatus.ATTACKING, this::isAttacking, this::onStartAttacking, this::onStopNothing);
 
     public PlayerController() {
@@ -76,6 +77,7 @@ public class PlayerController {
 
         check(CURRENT, player, controller);
 
+        check(PRESET_EATING, player, controller);
         check(PRESET_USE_ANIMATION, player, controller);
         check(PRESET_FALLING, player, controller);
         check(PRESET_SWIMMING, player, controller);
@@ -150,6 +152,13 @@ public class PlayerController {
         return anim != ItemUseAnimation.NONE;
     }
 
+    private boolean isEating(Player player) {
+        if (!player.isUsingItem()) {
+            return false;
+        }
+        return player.getUseItem().getUseAnimation() == ItemUseAnimation.EAT;
+    }
+
     // START EVENTS
 
     private void onStartSprinting(Player player, PlayerAnimationController controller) {
@@ -187,6 +196,10 @@ public class PlayerController {
     }
 
     private void onStartNothing(Player player, PlayerAnimationController controller) {}
+
+    private void onStartEating(Player player, PlayerAnimationController controller) {
+        controller.triggerAnimation(EAT);
+    }
 
     private boolean isSword(ItemStack stack) {
         return stack.is(ItemTags.SWORDS);

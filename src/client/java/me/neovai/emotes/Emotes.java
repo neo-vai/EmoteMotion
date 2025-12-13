@@ -20,6 +20,7 @@ public class Emotes {
     public static int HAND_TICK;
 
     public static ResourceLocation JUMPTOSTAY;
+    public static ResourceLocation EAT;
 
     public static @Nullable ResourceLocation randomSword() {
         if (SWORD.isEmpty()) return null;
@@ -54,6 +55,8 @@ public class Emotes {
         HAND_TICK = 8;
 
         JUMPTOSTAY = ResourceLocation.parse("emotemotion:jump_to_stand");
+
+        EAT = ResourceLocation.parse("emotemotion:eat");
     }
 
 }

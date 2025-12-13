@@ -157,7 +157,7 @@ public class PlayerController {
         if (!player.isUsingItem()) {
             return false;
         }
-        return player.getUseItem().getUseAnimation() == ItemUseAnimation.EAT;
+        return player.getUseItem().getUseAnimation() == ItemUseAnimation.EAT || player.getUseItem().getUseAnimation() == ItemUseAnimation.DRINK;
     }
 
     // START EVENTS

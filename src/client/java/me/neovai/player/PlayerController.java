@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
 import org.jetbrains.annotations.Nullable;
 
 import static me.neovai.EmoteMotionClient.LAYER_ID;
@@ -23,12 +24,15 @@ public class PlayerController {
     private int ATTACK_TIMER;
 
 
-    private final CurrentStatus PRESET_STAY = new CurrentStatus(PlayerMotionStatus.STAY, this::isStay, this::onStartStay, this::onStopStay);
-    private final CurrentStatus PRESET_WALKING = new CurrentStatus(PlayerMotionStatus.WALKING, this::isWalking, this::onStartWalking, this::onStopWalking);
-    private final CurrentStatus PRESET_SPRINTING = new CurrentStatus(PlayerMotionStatus.SPRINTING, this::isSprinting, this::onStartSprinting, this::onStopSprinting);
-    private final CurrentStatus PRESET_JUMPING = new CurrentStatus(PlayerMotionStatus.JUMPING, this::isJumping, this::onStartJumping, this::onStopJumping);
-    private final CurrentStatus PRESET_SHIFTING = new CurrentStatus(PlayerMotionStatus.SHIFTING, this::isShifting, this::onStartShifting, this::onStopShifting);
-    private final CurrentStatus PRESET_ATTACKING = new CurrentStatus(PlayerMotionStatus.ATTACKING, this::isAttacking, this::onStartAttacking, this::onStopAttacking);
+    private final CurrentStatus PRESET_STAY = new CurrentStatus(PlayerMotionStatus.STAY, this::isStay, this::onStartNothing, this::onStopNothing);
+    private final CurrentStatus PRESET_WALKING = new CurrentStatus(PlayerMotionStatus.WALKING, this::isWalking, this::onStartWalking, this::onStopNothing);
+    private final CurrentStatus PRESET_SPRINTING = new CurrentStatus(PlayerMotionStatus.SPRINTING, this::isSprinting, this::onStartSprinting, this::onStopNothing);
+    private final CurrentStatus PRESET_JUMPING = new CurrentStatus(PlayerMotionStatus.JUMPING, this::isJumping, this::onStartJumping, this::onStopNothing);
+    private final CurrentStatus PRESET_FALLING = new CurrentStatus(PlayerMotionStatus.FALLING, this::isFalling, this::onStartFalling, this::onStopFalling);
+    private final CurrentStatus PRESET_SWIMMING = new CurrentStatus(PlayerMotionStatus.SWIMMING, this::isSwimming, this::onStartNothing, this::onStopNothing);
+    private final CurrentStatus PRESET_SHIFTING = new CurrentStatus(PlayerMotionStatus.SHIFTING, this::isShifting, this::onStartNothing, this::onStopNothing);
+    private final CurrentStatus PRESET_USE_ANIMATION = new CurrentStatus(PlayerMotionStatus.USE_ANIMATION, this::isUsingAnimation, this::onStartNothing, this::onStopNothing);
+    private final CurrentStatus PRESET_ATTACKING = new CurrentStatus(PlayerMotionStatus.ATTACKING, this::isAttacking, this::onStartAttacking, this::onStopNothing);
 
     public PlayerController() {
         this.CURRENT = PRESET_STAY;
@@ -72,6 +76,9 @@ public class PlayerController {
 
         check(CURRENT, player, controller);
 
+        check(PRESET_USE_ANIMATION, player, controller);
+        check(PRESET_FALLING, player, controller);
+        check(PRESET_SWIMMING, player, controller);
         check(PRESET_STAY, player, controller);
         check(PRESET_WALKING, player, controller);
         check(PRESET_SPRINTING, player, controller);
@@ -82,11 +89,10 @@ public class PlayerController {
     }
 
     private void check(CurrentStatus status, Player player, PlayerAnimationController controller) {
-        if (status.isFunc.apply(player) && CURRENT.PMSTATUS != status.PMSTATUS) {
-            if (compareStatus(status, CURRENT)) {
-                CURRENT = status;
-                status.onStart.accept(player, controller);
-            }
+        if ((status.isFunc.apply(player) && CURRENT.PMSTATUS != status.PMSTATUS) && compareStatus(status, CURRENT)) {
+            CURRENT.onStop.accept(controller);
+            CURRENT = status;
+            status.onStart.accept(player, controller);
         } else if (!status.isFunc.apply(player) && CURRENT == status) {
             status.onStop.accept(controller);
         }
@@ -105,7 +111,8 @@ public class PlayerController {
     }
 
     private boolean isJumping(Player player) {
-        return player.isJumping() && !player.onGround();
+        return (player.isJumping() && !player.onGround() && !isFlying(player) && !player.isSwimming())
+                || CURRENT.PMSTATUS == PlayerMotionStatus.JUMPING && !player.onGround() && !isFlying(player) && !player.isSwimming();
     }
 
     private boolean isShifting(Player player) {
@@ -113,11 +120,34 @@ public class PlayerController {
     }
 
     private boolean isStay(Player player) {
-        return true;
+        return player.onGround();
     }
 
     private boolean isAttacking(Player player) {
         return ATTACK_TIMER > 0;
+    }
+
+    private boolean isFalling(Player player) {
+        return !player.onGround() && !isFlying(player);
+    }
+
+    private boolean isFlying(Player player) {
+        return player.getAbilities().flying;
+    }
+
+    private boolean isSwimming(Player player) {
+        return player.isSwimming();
+    }
+
+    private boolean isUsingAnimation(Player player) {
+        if (!player.isUsingItem()) {
+            return false;
+        }
+
+        ItemStack stack = player.getUseItem();
+        ItemUseAnimation anim = stack.getItem().getUseAnimation(stack);
+
+        return anim != ItemUseAnimation.NONE;
     }
 
     // START EVENTS
@@ -136,8 +166,6 @@ public class PlayerController {
         }
     }
 
-    private void onStartShifting(Player player, PlayerAnimationController controller) {}
-
     private void onStartAttacking(Player player, PlayerAnimationController controller) {
         if (isSword(player.getMainHandItem())) {
             ResourceLocation sword = randomSword();
@@ -154,39 +182,27 @@ public class PlayerController {
         }
     }
 
-    private void onStartStay(Player player, PlayerAnimationController controller) {}
+    private void onStartFalling(Player player, PlayerAnimationController controller) {
+        controller.triggerAnimation(JUMP);
+    }
+
+    private void onStartNothing(Player player, PlayerAnimationController controller) {}
 
     private boolean isSword(ItemStack stack) {
         return stack.is(ItemTags.SWORDS);
     }
 
-
-
     // STOP EVENTS
 
-    private void onStopSprinting(PlayerAnimationController controller) {
+    private void onStopFalling(PlayerAnimationController controller) {
+        setCurrent(null);
+        controller.triggerAnimation(JUMPTOSTAY);
+    }
+
+    private void onStopNothing(PlayerAnimationController controller) {
         setCurrent(null);
         stopAnimation(controller);
     }
-
-    private void onStopWalking(PlayerAnimationController controller) {
-        setCurrent(null);
-        stopAnimation(controller);
-    }
-
-    private void onStopJumping(PlayerAnimationController controller) {
-        setCurrent(null);
-    }
-
-    private void onStopShifting(PlayerAnimationController controller) {
-        setCurrent(null);
-    }
-
-    private void onStopAttacking(PlayerAnimationController controller) {
-        setCurrent(null);
-    }
-
-    private void onStopStay(PlayerAnimationController controller) {}
 
     private void stopAnimation(PlayerAnimationController controller) {
         controller.stop();

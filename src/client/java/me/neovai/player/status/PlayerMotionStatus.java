@@ -5,8 +5,12 @@ public enum PlayerMotionStatus {
     WALKING(1),
     SPRINTING(2),
     JUMPING(3),
-    SHIFTING(3),
-    ATTACKING(5);
+    FALLING(4),
+    SWIMMING(5),
+    SHIFTING(6),
+    USE_ANIMATION(7),
+    EATING(7),
+    ATTACKING(8);
 
     private final int priority;
 

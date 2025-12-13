@@ -19,6 +19,8 @@ public class Emotes {
     public static final List<ResourceLocation> HAND = new ArrayList<>();
     public static int HAND_TICK;
 
+    public static ResourceLocation JUMPTOSTAY;
+
     public static @Nullable ResourceLocation randomSword() {
         if (SWORD.isEmpty()) return null;
         return random(new ArrayList<>(SWORD));
@@ -48,7 +50,10 @@ public class Emotes {
 
         HAND.add(ResourceLocation.parse("emotemotion:hand1"));
         HAND.add(ResourceLocation.parse("emotemotion:hand2"));
+        HAND.add(ResourceLocation.parse("emotemotion:hand3"));
         HAND_TICK = 8;
+
+        JUMPTOSTAY = ResourceLocation.parse("emotemotion:jump_to_stand");
     }
 
 }

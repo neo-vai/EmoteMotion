@@ -186,7 +186,7 @@ public class PlayerController {
                 return;
             }
         }
-        
+
         if (isWeapon(attackItem)) {
             return;
         }
@@ -213,7 +213,7 @@ public class PlayerController {
     }
 
     private boolean isWeapon(ItemStack stack) {
-        String name = stack.getItem().getDescriptionId().toString();
+        String name = stack.getItem().getDescriptionId();
         return name.endsWith("axe") || name.endsWith("spear") || name.endsWith("trident") || name.endsWith("sword") || name.endsWith("mace");
     }
 

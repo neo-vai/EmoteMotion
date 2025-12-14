@@ -21,6 +21,11 @@ repositories {
         name = "RedlanceMinecraft"
         url = "https://repo.redlance.org/public"
     }
+
+    maven {
+        name = "KosmX"
+        url = "https://maven.kosmx.dev"
+    }
 }
 
 loom {
@@ -45,6 +50,8 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation "com.zigythebird.playeranim:PlayerAnimationLibFabric:$project.pal_version"
+
+    implementation "io.github.kosmx.emotes:emotesAPI:3.1.0-b.build.131"
 	
 }
 

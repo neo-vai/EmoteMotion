@@ -1,12 +1,15 @@
 package me.neovai.player;
 
-import com.zigythebird.playeranim.animation.PlayerAnimationController;
-import com.zigythebird.playeranim.api.PlayerAnimationAccess;
+import com.zigythebird.playeranim.animation.PlayerAnimResources;
+import com.zigythebird.playeranimcore.animation.Animation;
+import io.github.kosmx.emotes.api.events.client.ClientEmoteAPI;
+import io.github.kosmx.emotes.api.events.client.ClientEmoteEvents;
 import me.neovai.player.status.CurrentStatus;
 import me.neovai.player.status.PlayerMotionStatus;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.client.player.ClientPreAttackCallback;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Player;
@@ -14,11 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
-import static me.neovai.EmoteMotionClient.LAYER_ID;
+import java.util.UUID;
 
 import static me.neovai.emotes.Emotes.*;
 
@@ -26,6 +25,7 @@ public class PlayerController {
 
     private CurrentStatus CURRENT;
     private int ATTACK_TIMER;
+    private int EMOTECRAFT_ANIM_TIMER;
 
 
     private final CurrentStatus PRESET_STAY = new CurrentStatus(PlayerMotionStatus.STAY, this::isStay, this::onStartNothing, this::onStopNothing);
@@ -36,69 +36,74 @@ public class PlayerController {
     private final CurrentStatus PRESET_SWIMMING = new CurrentStatus(PlayerMotionStatus.SWIMMING, this::isSwimming, this::onStartNothing, this::onStopNothing);
     private final CurrentStatus PRESET_SHIFTING = new CurrentStatus(PlayerMotionStatus.SHIFTING, this::isShifting, this::onStartNothing, this::onStopNothing);
     private final CurrentStatus PRESET_USE_ANIMATION = new CurrentStatus(PlayerMotionStatus.USE_ANIMATION, this::isUsingAnimation, this::onStartNothing, this::onStopNothing);
+    private final CurrentStatus PRESET_EATING = new CurrentStatus(PlayerMotionStatus.EATING, this::isEating, this::onStartEating, this::onStopNothing);
     private final CurrentStatus PRESET_ATTACKING = new CurrentStatus(PlayerMotionStatus.ATTACKING, this::isAttacking, this::onStartAttacking, this::onStopNothing);
+    private final CurrentStatus PRESET_EMOTECRAFT_ANIMATION = new CurrentStatus(PlayerMotionStatus.EMOTECRAFT_ANIMATION, this::isPlayingEmoteCraftAnimation, this::onStartNothing, this::onStopNothing);
 
     public PlayerController() {
         this.CURRENT = PRESET_STAY;
 
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (client.player != null) {
-                updatePlayerAnimation(client);
+        ClientTickEvents.END_CLIENT_TICK.register(this::update);
+        ClientPreAttackCallback.EVENT.register(this::attackEvent);
+        ClientEmoteEvents.EMOTE_PLAY.register(this::animationPlayEvent);
+        ClientEmoteEvents.LOCAL_EMOTE_STOP.register(this::animationStopEvent);
+    }
+
+    private void animationPlayEvent(Animation emoteData, float tick, UUID uuid) {
+        if (local_names.isEmpty()) addAllLocalEmotes();
+        if (!local_names.contains(emoteData.getNameOrId()) && CURRENT.PMSTATUS != PlayerMotionStatus.EMOTECRAFT_ANIMATION) {
+            CURRENT = PRESET_EMOTECRAFT_ANIMATION;
+            if (emoteData.loopType() == Animation.LoopType.PLAY_ONCE) {
+                EMOTECRAFT_ANIM_TIMER = ((Float) emoteData.data().get("endTick").get()).intValue();
+            } else {
+                EMOTECRAFT_ANIM_TIMER = Integer.MIN_VALUE;
             }
-        });
-
-        ClientPreAttackCallback.EVENT.register((client, player, i)
-                -> {
-            if (client != null && player != null) {
-                attackEvent(player, player.getMainHandItem());
-            }
-            return false;
-        });
-    }
-
-    // First > Second
-    private boolean compareStatus(PlayerMotionStatus first, PlayerMotionStatus second) {
-        return first.getPriority() > second.getPriority();
-    }
-
-    // First > Second
-    private boolean compareStatus(CurrentStatus first, CurrentStatus second) {
-        return compareStatus(first.PMSTATUS, second.PMSTATUS);
-    }
-
-    private void attackEvent(Player player, ItemStack itemStack) {
-        if (CURRENT.PMSTATUS != PlayerMotionStatus.ATTACKING) {
-            onStartAttacking(player, getController(player, LAYER_ID));
         }
     }
 
-    private void updatePlayerAnimation(Minecraft client) {
+    private void animationStopEvent() {
+        if (CURRENT == PRESET_EMOTECRAFT_ANIMATION) {
+            CURRENT = PRESET_STAY;
+            EMOTECRAFT_ANIM_TIMER = 0;
+        }
+    }
+
+    private boolean attackEvent(Minecraft client, LocalPlayer player, int i) {
+        if (CURRENT.PMSTATUS != PlayerMotionStatus.ATTACKING) {
+            onStartAttacking(player);
+        }
+        return false;
+    }
+
+    private void update(Minecraft client) {
         Player player = client.player;
+        if (player == null) return;
+
         if (ATTACK_TIMER > 0) ATTACK_TIMER--;
+        if (EMOTECRAFT_ANIM_TIMER > 0) EMOTECRAFT_ANIM_TIMER--;
 
-        PlayerAnimationController controller = getController(player, LAYER_ID);
+        check(CURRENT, player);
 
-        check(CURRENT, player, controller);
-
-        check(PRESET_USE_ANIMATION, player, controller);
-        check(PRESET_FALLING, player, controller);
-        check(PRESET_SWIMMING, player, controller);
-        check(PRESET_STAY, player, controller);
-        check(PRESET_WALKING, player, controller);
-        check(PRESET_SPRINTING, player, controller);
-        check(PRESET_JUMPING, player, controller);
-        check(PRESET_SHIFTING, player, controller);
-        check(PRESET_ATTACKING, player, controller);
+        check(PRESET_EATING, player);
+        check(PRESET_USE_ANIMATION, player);
+        check(PRESET_FALLING, player);
+        check(PRESET_SWIMMING, player);
+        check(PRESET_STAY, player);
+        check(PRESET_WALKING, player);
+        check(PRESET_SPRINTING, player);
+        check(PRESET_JUMPING, player);
+        check(PRESET_SHIFTING, player);
+        check(PRESET_ATTACKING, player);
 
     }
 
-    private void check(CurrentStatus status, Player player, PlayerAnimationController controller) {
-        if ((status.isFunc.apply(player) && CURRENT.PMSTATUS != status.PMSTATUS) && compareStatus(status, CURRENT)) {
-            CURRENT.onStop.accept(controller);
+    private void check(CurrentStatus status, Player player) {
+        if ((status.isFunc.apply(player) && CURRENT.PMSTATUS != status.PMSTATUS) && CurrentStatus.compareStatus(status.PMSTATUS, CURRENT.PMSTATUS)) {
+            CURRENT.onStop.run();
             CURRENT = status;
-            status.onStart.accept(player, controller);
+            status.onStart.accept(player);
         } else if (!status.isFunc.apply(player) && CURRENT == status) {
-            status.onStop.accept(controller);
+            status.onStop.run();
         }
     }
 
@@ -154,62 +159,86 @@ public class PlayerController {
         return anim != ItemUseAnimation.NONE;
     }
 
+    private boolean isEating(Player player) {
+        if (!player.isUsingItem()) {
+            return false;
+        }
+        return player.getUseItem().getUseAnimation() == ItemUseAnimation.EAT || player.getUseItem().getUseAnimation() == ItemUseAnimation.DRINK;
+    }
+
+    private boolean isPlayingEmoteCraftAnimation(Player player) {
+        if (CURRENT.PMSTATUS != PlayerMotionStatus.EMOTECRAFT_ANIMATION) return false;
+        return EMOTECRAFT_ANIM_TIMER > 0 || EMOTECRAFT_ANIM_TIMER == Integer.MIN_VALUE;
+    }
     // START EVENTS
 
-    private void onStartSprinting(Player player, PlayerAnimationController controller) {
-        controller.triggerAnimation(RUN);
+    private void onStartSprinting(Player player) {
+        playAnimation(RUN);
     }
 
-    private void onStartWalking(Player player, PlayerAnimationController controller) {
-        controller.triggerAnimation(GAIT);
+    private void onStartWalking(Player player) {
+        playAnimation(GAIT);
     }
 
-    private void onStartJumping(Player player, PlayerAnimationController controller) {
+    private void onStartJumping(Player player) {
         if (!isShifting(player)) {
-            controller.triggerAnimation(JUMP);
+            playAnimation(JUMP);
         }
     }
 
-    private void onStartAttacking(Player player, PlayerAnimationController controller) {
-        if (isSword(player.getMainHandItem())) {
+    private void onStartAttacking(Player player) {
+        ItemStack attackItem = player.getMainHandItem();
+        if (isSword(attackItem)) {
             ResourceLocation sword = randomSword();
             if (sword != null) {
                 ATTACK_TIMER = SWORD_TICKS;
-                controller.triggerAnimation(sword);
+                playAnimation(sword);
                 return;
             }
         }
+
+        if (isWeapon(attackItem)) {
+            return;
+        }
+
         ResourceLocation hand = randomHand();
         if (hand != null) {
             ATTACK_TIMER = HAND_TICK;
-            controller.triggerAnimation(randomHand());
+            playAnimation(randomHand());
         }
     }
 
-    private void onStartFalling(Player player, PlayerAnimationController controller) {
-        controller.triggerAnimation(JUMP);
+    private void onStartFalling(Player player) {
+        playAnimation(JUMP);
     }
 
-    private void onStartNothing(Player player, PlayerAnimationController controller) {}
+
+    private void onStartNothing(Player player) {}
+
+    private void onStartEating(Player player) {
+        playAnimation(EAT);
+    }
 
     private boolean isSword(ItemStack stack) {
         return stack.is(ItemTags.SWORDS);
     }
 
+    private boolean isWeapon(ItemStack stack) {
+        String name = stack.getItem().getDescriptionId();
+        return name.endsWith("axe") || name.endsWith("spear") || name.endsWith("trident") || name.endsWith("sword") || name.endsWith("mace");
+    }
+
+
     // STOP EVENTS
 
-    private void onStopFalling(PlayerAnimationController controller) {
+    private void onStopFalling() {
         setCurrent(null);
-        controller.triggerAnimation(JUMPTOSTAY);
+        playAnimation(JUMPTOSTAY);
     }
 
-    private void onStopNothing(PlayerAnimationController controller) {
+    private void onStopNothing() {
         setCurrent(null);
-        stopAnimation(controller);
-    }
-
-    private void stopAnimation(PlayerAnimationController controller) {
-        controller.stop();
+        stopAnimation();
     }
 
     private void setCurrent(@Nullable CurrentStatus status) {
@@ -220,8 +249,12 @@ public class PlayerController {
         }
     }
 
-    private PlayerAnimationController getController(Player player, ResourceLocation layer_id) {
-        return  (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer(player, layer_id);
+    private void playAnimation(ResourceLocation animation) {
+        ClientEmoteAPI.playEmote(PlayerAnimResources.getAnimation(animation));
+    }
+
+    private void stopAnimation() {
+        ClientEmoteAPI.stopEmote();
     }
 
 }

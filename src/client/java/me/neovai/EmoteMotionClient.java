@@ -26,6 +26,5 @@ public class EmoteMotionClient implements ClientModInitializer {
         );
 
         new PlayerController();
-
 	}
 }

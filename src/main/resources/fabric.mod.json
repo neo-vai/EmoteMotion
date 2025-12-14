@@ -26,7 +26,8 @@
 		"minecraft": ">=1.21.9",
 		"java": ">=21",
 		"fabric-api": "*",
-        "player_animation_library": "*"
+        "player_animation_library": "*",
+        "emotecraft": "*"
     },
 	"suggests": {
 		"another-mod": "*"

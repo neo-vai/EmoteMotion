@@ -10,7 +10,8 @@ public enum PlayerMotionStatus {
     SHIFTING(6),
     USE_ANIMATION(7),
     ATTACKING(8),
-    EATING(9);
+    EATING(9),
+    EMOTECRAFT_ANIMATION(100);
 
     private final int priority;
 

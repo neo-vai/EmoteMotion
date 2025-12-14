@@ -1,5 +1,6 @@
 package me.neovai.emotes;
 
+import com.zigythebird.playeranim.animation.PlayerAnimResources;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -8,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Emotes {
+
+    public static final List<String> local_names = new ArrayList<>();
 
     public static ResourceLocation RUN;
     public static ResourceLocation GAIT;
@@ -49,6 +52,7 @@ public class Emotes {
         SWORD.add(ResourceLocation.parse("emotemotion:sword3"));
         SWORD_TICKS = 11;
 
+
         HAND.add(ResourceLocation.parse("emotemotion:hand1"));
         HAND.add(ResourceLocation.parse("emotemotion:hand2"));
         HAND.add(ResourceLocation.parse("emotemotion:hand3"));
@@ -57,6 +61,23 @@ public class Emotes {
         JUMPTOSTAY = ResourceLocation.parse("emotemotion:jump_to_stand");
 
         EAT = ResourceLocation.parse("emotemotion:eat");
+    }
+
+    public static void addAllLocalEmotes() {
+        local_names.add(PlayerAnimResources.getAnimation(RUN).getNameOrId());
+        local_names.add(PlayerAnimResources.getAnimation(GAIT).getNameOrId());
+        local_names.add(PlayerAnimResources.getAnimation(JUMP).getNameOrId());
+
+        for (int i = 0; i < SWORD.size(); i++) {
+            local_names.add(PlayerAnimResources.getAnimation(SWORD.get(i)).getNameOrId());
+        }
+
+        for (int i = 0; i < HAND.size(); i++) {
+            local_names.add(PlayerAnimResources.getAnimation(HAND.get(i)).getNameOrId());
+        }
+
+        local_names.add(PlayerAnimResources.getAnimation(JUMPTOSTAY).getNameOrId());
+        local_names.add(PlayerAnimResources.getAnimation(EAT).getNameOrId());
     }
 
 }

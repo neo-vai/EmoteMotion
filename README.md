@@ -3,9 +3,9 @@
 
 > **⚠️ ALPHA — Many features are not yet implemented and will be added soon.**
 
-**Animations are visible to all players using EmoteCraft or the library — even if they do not have EmoteMotion!**
+**Animations are visible to all players using EmoteCraft — even if they do not have EmoteMotion!**
 
-EmoteMotion is a **Minecraft Fabric mod (1.21.10 +)** that adds **cool player animations** using the **Player Animation Library (EmoteCraft)**. Make your character move and act in new, dynamic ways.
+EmoteMotion is a **Minecraft Fabric mod (1.21.10 +)** that adds **cool player animations** using the **EmoteCraft**. Make your character move and act in new, dynamic ways.
 
 ## Current Features
 

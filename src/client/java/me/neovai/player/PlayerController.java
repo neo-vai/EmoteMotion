@@ -7,6 +7,7 @@ import me.neovai.player.status.PlayerMotionStatus;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.client.player.ClientPreAttackCallback;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -243,7 +244,7 @@ public class PlayerController {
     }
 
     private PlayerAnimationController getController(Player player, ResourceLocation layer_id) {
-        return  (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer(player, layer_id);
+        return  (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer( player, layer_id);
     }
 
 }

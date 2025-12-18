@@ -38,6 +38,7 @@ public class PlayerController {
     private final CurrentStatus PRESET_USE_ANIMATION = new CurrentStatus(PlayerMotionStatus.USE_ANIMATION, this::isUsingAnimation, this::onStartNothing, this::onStopNothing);
     private final CurrentStatus PRESET_EATING = new CurrentStatus(PlayerMotionStatus.EATING, this::isEating, this::onStartEating, this::onStopNothing);
     private final CurrentStatus PRESET_ATTACKING = new CurrentStatus(PlayerMotionStatus.ATTACKING, this::isAttacking, this::onStartAttacking, this::onStopNothing);
+    private final CurrentStatus PRESET_CLIMBING = new CurrentStatus(PlayerMotionStatus.CLIMBING, this::isClimbing, this::onStartNothing, this::onStopNothing);
     private final CurrentStatus PRESET_EMOTECRAFT_ANIMATION = new CurrentStatus(PlayerMotionStatus.EMOTECRAFT_ANIMATION, this::isPlayingEmoteCraftAnimation, this::onStartNothing, this::onStopNothing);
 
     public PlayerController() {
@@ -84,6 +85,7 @@ public class PlayerController {
 
         check(CURRENT, player);
 
+        check(PRESET_CLIMBING, player);
         check(PRESET_EATING, player);
         check(PRESET_USE_ANIMATION, player);
         check(PRESET_FALLING, player);
@@ -157,6 +159,10 @@ public class PlayerController {
         ItemUseAnimation anim = stack.getItem().getUseAnimation(stack);
 
         return anim != ItemUseAnimation.NONE;
+    }
+
+    private boolean isClimbing(Player player) {
+        return player.onClimbable();
     }
 
     private boolean isEating(Player player) {

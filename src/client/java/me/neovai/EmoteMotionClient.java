@@ -4,6 +4,7 @@ package me.neovai;
 import com.zigythebird.playeranim.animation.PlayerAnimationController;
 import com.zigythebird.playeranim.api.PlayerAnimationFactory;
 import com.zigythebird.playeranimcore.enums.PlayState;
+import me.neovai.config.config;
 import me.neovai.emotes.Emotes;
 import me.neovai.player.PlayerController;
 import net.fabricmc.api.ClientModInitializer;
@@ -26,5 +27,7 @@ public class EmoteMotionClient implements ClientModInitializer {
         );
 
         new PlayerController();
+
+        config.modifyEmoteCraftConfig();
 	}
 }

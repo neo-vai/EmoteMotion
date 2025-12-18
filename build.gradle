@@ -51,8 +51,8 @@ dependencies {
 
     modImplementation "com.zigythebird.playeranim:PlayerAnimationLibFabric:$project.pal_version"
 
-    implementation "io.github.kosmx.emotes:emotesAPI:3.1.0-b.build.131"
-	
+//    implementation "io.github.kosmx.emotes:emotesAPI:3.1.0-b.build.131" // It does not let me modify custom config
+    compileOnly files('libs/emotecraft-fabric-for-MC1.21.9-3.1.0-b.build.131.jar')
 }
 
 processResources {

@@ -37,3 +37,11 @@ EmoteMotion is a **Minecraft Fabric mod (1.21.10 +)** that adds **cool player an
 ## Download
 
 Get the mod on **[Modrinth](https://modrinth.com/project/emotemotion)**
+
+## Build
+
+1. [Download](https://cdn.modrinth.com/data/pZ2wrerK/versions/3TUdChhE/emotecraft-fabric-for-MC1.21.9-3.1.0-b.build.131.jar) and put `emotecraft-fabric-for-MC1.21.9-3.1.0-b.build.131.jar` in the _libs_ folder
+2. Make sure you have a Fabric development environment set up (e.g., using Fabric Loom with the appropriate Minecraft version).
+3. Import the project into your IDE (IntelliJ IDEA, Eclipse, or VS Code) as a Gradle project.
+4. Run `./gradlew build` (or `gradlew.bat build` on Windows) to compile the mod.
+5. The compiled `.jar` will be located in `build/libs/`.

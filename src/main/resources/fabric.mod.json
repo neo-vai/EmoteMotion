@@ -12,11 +12,8 @@
 	},
 	"license": "GPL-3.0",
 	"icon": "assets/emotemotion/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
-		"main": [
-			"me.neovai.EmoteMotion"
-		],
 		"client": [
 			"me.neovai.EmoteMotionClient"
 		]
@@ -29,6 +26,7 @@
         "player_animation_library": "*",
         "emotecraft": "*"
     },
+    "loadBefore": ["emotecraft"],
 	"suggests": {
 		"another-mod": "*"
 	}

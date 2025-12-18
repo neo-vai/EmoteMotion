@@ -20,18 +20,20 @@ EmoteMotion is a **Minecraft Fabric mod (1.21.10 +)** that adds **cool player an
 
 ## Planned Features
 
--   Settings menu to change animations and toggle options
--   Bone bending for animations (currently animations are not bendable)
--   AFK animations
--   Weapon-specific animations:
-    -   Spear
-    -   Axe
-    -   Trident
-    -   Mace
-    -   Pickaxe
-
--   Edge-standing animation
--   Swimming animation
+- Settings menu to change animations and toggle options
+- Update Animations & Bone bending for animations
+- AFK usage animations
+- Pickaxe animation
+- Weapon-specific animations:
+    - Spear
+    - Axe
+    - Trident
+    - Mace
+    - Pickaxe
+- Edge-standing animation
+- Drop animation
+- Shifting animation
+- Swimming animation
 
 
 ## Download

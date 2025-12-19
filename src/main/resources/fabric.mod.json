@@ -28,7 +28,7 @@
         "player_animation_library": "*",
         "emotecraft": "*"
     },
-    "loadBefore": ["emotecraft"],
+    "loadAfter": ["emotecraft"],
 	"suggests": {
 		"another-mod": "*"
 	}

@@ -19,7 +19,6 @@ public class EmoteMotionClient implements ClientModInitializer {
 	public void onInitializeClient() {
         Emotes.init();
 
-        // EmoteCraft Layer innit
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(LAYER_ID, 900,
                 player -> new PlayerAnimationController(player,
                         (controller, state, animSetter) -> PlayState.STOP

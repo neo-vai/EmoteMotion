@@ -7,6 +7,9 @@
 
 EmoteMotion is a **Minecraft Fabric mod (1.21.10 +)** that adds **cool player animations** using the **EmoteCraft**. Make your character move and act in new, dynamic ways.
 
+
+![GIF preview](https://cdn.modrinth.com/data/ZmaS2Xjg/images/4c381a32966dbc02dc5c89564e4b261826c9ef90.gif)
+
 ## Current Features
 
 -   Walking animations

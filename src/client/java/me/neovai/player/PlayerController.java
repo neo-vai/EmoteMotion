@@ -1,5 +1,6 @@
 package me.neovai.player;
 
+import com.mojang.authlib.minecraft.client.MinecraftClient;
 import com.zigythebird.playeranim.animation.PlayerAnimResources;
 import com.zigythebird.playeranimcore.animation.Animation;
 import io.github.kosmx.emotes.api.events.client.ClientEmoteAPI;
@@ -10,6 +11,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.client.player.ClientPreAttackCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Player;
@@ -23,10 +25,15 @@ import static me.neovai.emotes.Emotes.*;
 
 public class PlayerController {
 
+    private boolean showDebugStatus = false;
+
+    public void toggleDebug() {
+        showDebugStatus = !showDebugStatus;
+    }
+
     private CurrentStatus CURRENT;
     private int ATTACK_TIMER;
     private int EMOTECRAFT_ANIM_TIMER;
-
 
     private final CurrentStatus PRESET_STAY = new CurrentStatus(PlayerMotionStatus.STAY, this::isStay, this::onStartNothing, this::onStopNothing);
     private final CurrentStatus PRESET_WALKING = new CurrentStatus(PlayerMotionStatus.WALKING, this::isWalking, this::onStartWalking, this::onStopNothing);
@@ -76,9 +83,20 @@ public class PlayerController {
         return false;
     }
 
+    private void sendStatus(CurrentStatus status) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player != null) {
+            minecraft.player.displayClientMessage(Component.literal("[EmoteMotion]" + status.PMSTATUS.toString()), false);
+        }
+    }
+
     private void update(Minecraft client) {
         Player player = client.player;
         if (player == null) return;
+
+        if (showDebugStatus) {
+            sendStatus(CURRENT);
+        }
 
         if (ATTACK_TIMER > 0) ATTACK_TIMER--;
         if (EMOTECRAFT_ANIM_TIMER > 0) EMOTECRAFT_ANIM_TIMER--;

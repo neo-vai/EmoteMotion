@@ -3,7 +3,7 @@ package me.neovai.config;
 import io.github.kosmx.emotes.PlatformTools;
 import io.github.kosmx.emotes.main.config.ClientConfig;
 
-public class config {
+public class Config {
 
     public static void modifyEmoteCraftConfig() {
         ClientConfig config = PlatformTools.getConfig();

@@ -1,32 +1,32 @@
 package me.neovai;
 
-
-import com.zigythebird.playeranim.animation.PlayerAnimationController;
-import com.zigythebird.playeranim.api.PlayerAnimationFactory;
-import com.zigythebird.playeranimcore.enums.PlayState;
-import me.neovai.config.config;
+import me.neovai.config.Config;
 import me.neovai.emotes.Emotes;
 import me.neovai.player.PlayerController;
 import net.fabricmc.api.ClientModInitializer;
-import net.minecraft.resources.ResourceLocation;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 
 
 public class EmoteMotionClient implements ClientModInitializer {
 
-    public static ResourceLocation LAYER_ID = ResourceLocation.fromNamespaceAndPath("emotemotion", "layer");
+    public static PlayerController playerController;
 
 	@Override
 	public void onInitializeClient() {
         Emotes.init();
 
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(LAYER_ID, 900,
-                player -> new PlayerAnimationController(player,
-                        (controller, state, animSetter) -> PlayState.STOP
-                )
-        );
+        playerController = new PlayerController();
 
-        new PlayerController();
+        // DEBUG ONLY METHOD
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+            dispatcher.register(ClientCommandManager.literal("emotemotionstatus")
+                    .executes(context -> {
+                        playerController.toggleDebug();
+                        return 1;
+                    }));
+        });
 
-        config.modifyEmoteCraftConfig();
+        Config.modifyEmoteCraftConfig();
 	}
 }

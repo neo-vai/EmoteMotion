@@ -17,6 +17,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.TridentItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -212,30 +213,30 @@ public class PlayerController {
 
     private void onStartAttacking(Player player) {
         ItemStack attackItem = player.getMainHandItem();
+
+        ResourceLocation weapon = null;
+        int timer = 0;
+
         if (isSword(attackItem)) {
-            ResourceLocation sword = randomSword();
-            if (sword != null) {
-                ATTACK_TIMER = SWORD_TICKS;
-                playAnimation(sword);
-                return;
-            }
+            weapon = randomSword();
+            timer = SWORD_TICKS;
         } else if (isAxe(attackItem)) {
-            ResourceLocation axe = randomAxe();
-            if (axe != null) {
-                ATTACK_TIMER = AXE_TICK;
-                playAnimation(axe);
-                return;
+            weapon = randomAxe();
+            timer = AXE_TICK;
+        } else if (isTrident(attackItem)) {
+            weapon = randomTrident();
+            timer = TRIDENT_TICK;
+        } else {
+            ResourceLocation hand = randomHand();
+            if (hand != null) {
+                ATTACK_TIMER = HAND_TICK;
+                playAnimation(randomHand());
             }
         }
 
-        if (isWeapon(attackItem)) {
-            return;
-        }
-
-        ResourceLocation hand = randomHand();
-        if (hand != null) {
-            ATTACK_TIMER = HAND_TICK;
-            playAnimation(randomHand());
+        if (weapon != null) {
+            playAnimation(weapon);
+            ATTACK_TIMER = timer;
         }
     }
 
@@ -256,6 +257,10 @@ public class PlayerController {
 
     private boolean isAxe(ItemStack stack) {
         return stack.is(ItemTags.AXES);
+    }
+
+    private boolean isTrident(ItemStack stack) {
+        return stack.getItem() instanceof TridentItem;
     }
 
     private boolean isWeapon(ItemStack stack) {

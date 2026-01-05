@@ -1,3 +1,4 @@
+[![Available for Fabric](https://wsrv.nl/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40intergrav%2Fdevins-badges%403%2Fassets%2Fcozy%2Fsupported%2Ffabric_vector.svg&n=-1)](https://modrinth.com/mod/fabric-api) [![Join the Discord](https://wsrv.nl/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40intergrav%2Fdevins-badges%403%2Fassets%2Fcozy%2Fsocial%2Fdiscord-plural_vector.svg&n=-1)](https://discord.com/invite/KSX3AQGz)
 
 # EmoteMotion (Alpha)
 

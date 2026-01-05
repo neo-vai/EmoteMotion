@@ -1,3 +1,4 @@
+[![Available for Fabric](https://wsrv.nl/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40intergrav%2Fdevins-badges%403%2Fassets%2Fcozy%2Fsupported%2Ffabric_vector.svg&n=-1)](https://modrinth.com/mod/fabric-api) [![Join the Discord](https://wsrv.nl/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40intergrav%2Fdevins-badges%403%2Fassets%2Fcozy%2Fsocial%2Fdiscord-plural_vector.svg&n=-1)](https://discord.com/invite/KSX3AQGz)
 
 # EmoteMotion (Alpha)
 
@@ -5,7 +6,7 @@
 
 **Animations are visible to all players using EmoteCraft — even if they do not have EmoteMotion!**
 
-EmoteMotion is a **Minecraft Fabric mod (1.21.11 +)** that adds **cool player animations** using the **EmoteCraft**. Make your character move and act in new, dynamic ways.
+EmoteMotion is a **Minecraft Fabric mod (1.21.9 +)** that adds **cool player animations** using the **EmoteCraft**. Make your character move and act in new, dynamic ways.
 
 
 ![GIF preview](https://cdn.modrinth.com/data/ZmaS2Xjg/images/4c381a32966dbc02dc5c89564e4b261826c9ef90.gif)

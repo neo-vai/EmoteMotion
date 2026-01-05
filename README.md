@@ -21,6 +21,7 @@ EmoteMotion is a **Minecraft Fabric mod (1.21.9 +)** that adds **cool player ani
 -   Attack animations (3 types: left hand, right hand, leg)
 -   Sword attack animations (3 types)
 -   Axe attack animations (3 types)
+-   Trident attack animation (2 types)    
 -   Eating or drinking potions animation
 
 ## Planned Features
@@ -32,7 +33,7 @@ EmoteMotion is a **Minecraft Fabric mod (1.21.9 +)** that adds **cool player ani
 - Weapon-specific animations:
     - Spear
     - [x] ~~Axe~~ 
-    - Trident
+    - [x] ~~Trident~~
     - Mace
 - Edge-standing animation
 - Drop animation

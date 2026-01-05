@@ -1,6 +1,7 @@
 package me.neovai.emotes;
 
 import com.zigythebird.playeranim.animation.PlayerAnimResources;
+import com.zigythebird.playeranimcore.animation.Animation;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,12 +23,20 @@ public class Emotes {
     public static final List<ResourceLocation> HAND = new ArrayList<>();
     public static int HAND_TICK;
 
+    public static final List<ResourceLocation> AXE = new ArrayList<>();
+    public static int AXE_TICK;
+
     public static ResourceLocation JUMPTOSTAY;
     public static ResourceLocation EAT;
 
     public static @Nullable ResourceLocation randomSword() {
         if (SWORD.isEmpty()) return null;
         return random(new ArrayList<>(SWORD));
+    }
+
+    public static @Nullable ResourceLocation randomAxe() {
+        if (AXE.isEmpty()) return  null;
+        return random(new ArrayList<>(AXE));
     }
 
     public static @Nullable ResourceLocation randomHand() {
@@ -52,11 +61,15 @@ public class Emotes {
         SWORD.add(ResourceLocation.parse("emotemotion:sword3"));
         SWORD_TICKS = 11;
 
-
         HAND.add(ResourceLocation.parse("emotemotion:hand1"));
         HAND.add(ResourceLocation.parse("emotemotion:hand2"));
         HAND.add(ResourceLocation.parse("emotemotion:hand3"));
         HAND_TICK = 8;
+
+        AXE.add(ResourceLocation.parse("emotemotion:sword1"));
+        AXE.add(ResourceLocation.parse("emotemotion:axe2"));
+        AXE_TICK = 12;
+
 
         JUMPTOSTAY = ResourceLocation.parse("emotemotion:jump_to_stand");
 
@@ -64,20 +77,32 @@ public class Emotes {
     }
 
     public static void addAllLocalEmotes() {
-        local_names.add(PlayerAnimResources.getAnimation(RUN).getNameOrId());
-        local_names.add(PlayerAnimResources.getAnimation(GAIT).getNameOrId());
-        local_names.add(PlayerAnimResources.getAnimation(JUMP).getNameOrId());
+        addLocalEmote(RUN);
+        addLocalEmote(GAIT);
+        addLocalEmote(JUMP);
+        addListEmotes(SWORD);
+        addListEmotes(AXE);
+        addListEmotes(HAND);
+        addLocalEmote(JUMPTOSTAY);
+        addLocalEmote(EAT);
+    }
 
-        for (int i = 0; i < SWORD.size(); i++) {
-            local_names.add(PlayerAnimResources.getAnimation(SWORD.get(i)).getNameOrId());
+    public static void addLocalEmote(Animation anim) {
+        if (anim != null) {
+            local_names.add(anim.getNameOrId());
         }
+    }
 
-        for (int i = 0; i < HAND.size(); i++) {
-            local_names.add(PlayerAnimResources.getAnimation(HAND.get(i)).getNameOrId());
+    public static void addLocalEmote(ResourceLocation loc) {
+        if (loc != null) {
+            addLocalEmote(PlayerAnimResources.getAnimation(loc));
         }
+    }
 
-        local_names.add(PlayerAnimResources.getAnimation(JUMPTOSTAY).getNameOrId());
-        local_names.add(PlayerAnimResources.getAnimation(EAT).getNameOrId());
+    public static void addListEmotes(List<ResourceLocation> list) {
+        for (int i = 0; i < list.size(); i++) {
+            local_names.add(PlayerAnimResources.getAnimation(list.get(i)).getNameOrId());
+        }
     }
 
 }

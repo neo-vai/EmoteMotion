@@ -86,7 +86,7 @@ public class PlayerController {
     private void sendStatus(CurrentStatus status) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player != null) {
-            minecraft.player.displayClientMessage(Component.literal("[EmoteMotion]" + status.PMSTATUS.toString()), false);
+            minecraft.player.displayClientMessage(Component.literal("[EmoteMotion] " + status.PMSTATUS.toString()), false);
         }
     }
 
@@ -219,6 +219,13 @@ public class PlayerController {
                 playAnimation(sword);
                 return;
             }
+        } else if (isAxe(attackItem)) {
+            ResourceLocation axe = randomAxe();
+            if (axe != null) {
+                ATTACK_TIMER = AXE_TICK;
+                playAnimation(axe);
+                return;
+            }
         }
 
         if (isWeapon(attackItem)) {
@@ -245,6 +252,10 @@ public class PlayerController {
 
     private boolean isSword(ItemStack stack) {
         return stack.is(ItemTags.SWORDS);
+    }
+
+    private boolean isAxe(ItemStack stack) {
+        return stack.is(ItemTags.AXES);
     }
 
     private boolean isWeapon(ItemStack stack) {

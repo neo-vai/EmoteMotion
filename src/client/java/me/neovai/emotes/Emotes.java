@@ -68,6 +68,7 @@ public class Emotes {
 
         AXE.add(ResourceLocation.parse("emotemotion:sword1"));
         AXE.add(ResourceLocation.parse("emotemotion:axe2"));
+        AXE.add(ResourceLocation.parse("emotemotion:axe3"));
         AXE_TICK = 12;
 
 

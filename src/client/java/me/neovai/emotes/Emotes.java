@@ -26,6 +26,9 @@ public class Emotes {
     public static final List<ResourceLocation> AXE = new ArrayList<>();
     public static int AXE_TICK;
 
+    public static final List<ResourceLocation> TRIDENT = new ArrayList<>();
+    public static int TRIDENT_TICK;
+
     public static ResourceLocation JUMPTOSTAY;
     public static ResourceLocation EAT;
 
@@ -37,6 +40,11 @@ public class Emotes {
     public static @Nullable ResourceLocation randomAxe() {
         if (AXE.isEmpty()) return  null;
         return random(new ArrayList<>(AXE));
+    }
+
+    public static @Nullable ResourceLocation randomTrident() {
+        if (TRIDENT.isEmpty()) return  null;
+        return random(new ArrayList<>(TRIDENT));
     }
 
     public static @Nullable ResourceLocation randomHand() {
@@ -71,6 +79,9 @@ public class Emotes {
         AXE.add(ResourceLocation.parse("emotemotion:axe3"));
         AXE_TICK = 12;
 
+        TRIDENT.add(ResourceLocation.parse("emotemotion:trident1"));
+        TRIDENT.add(ResourceLocation.parse("emotemotion:trident2"));
+        TRIDENT_TICK = 11;
 
         JUMPTOSTAY = ResourceLocation.parse("emotemotion:jump_to_stand");
 
@@ -81,11 +92,12 @@ public class Emotes {
         addLocalEmote(RUN);
         addLocalEmote(GAIT);
         addLocalEmote(JUMP);
-        addListEmotes(SWORD);
-        addListEmotes(AXE);
-        addListEmotes(HAND);
+        addLocalEmote(SWORD);
+        addLocalEmote(AXE);
+        addLocalEmote(HAND);
         addLocalEmote(JUMPTOSTAY);
         addLocalEmote(EAT);
+        addLocalEmote(TRIDENT);
     }
 
     public static void addLocalEmote(Animation anim) {
@@ -100,7 +112,7 @@ public class Emotes {
         }
     }
 
-    public static void addListEmotes(List<ResourceLocation> list) {
+    public static void addLocalEmote(List<ResourceLocation> list) {
         for (int i = 0; i < list.size(); i++) {
             local_names.add(PlayerAnimResources.getAnimation(list.get(i)).getNameOrId());
         }

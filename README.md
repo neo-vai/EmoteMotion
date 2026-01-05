@@ -19,6 +19,7 @@ EmoteMotion is a **Minecraft Fabric mod (1.21.10 +)** that adds **cool player an
 -   Landing (from fall) animation
 -   Attack animations (3 types: left hand, right hand, leg)
 -   Sword attack animations (3 types)
+-   Axe attack animations (3 types)
 -   Eating or drinking potions animation
 
 ## Planned Features
@@ -29,10 +30,9 @@ EmoteMotion is a **Minecraft Fabric mod (1.21.10 +)** that adds **cool player an
 - Pickaxe animation
 - Weapon-specific animations:
     - Spear
-    - Axe
+    - [x] ~~Axe~~ 
     - Trident
     - Mace
-    - Pickaxe
 - Edge-standing animation
 - Drop animation
 - Shifting animation
